@@ -21,14 +21,8 @@ CHALLENGE 3
 */
 
 // game vars
-var scores, roundScore, activePlayer, dice, lastDice, activeGame, winScore;
+var scores, roundScore, activePlayer, activeGame, winScore;
 init();
-document.querySelector('.dice').style.display = 'none';
-
-document.getElementById('score-0').textContent = '0';
-document.getElementById('score-1').textContent = '0';
-document.getElementById('current-0').textContent = '0';
-document.getElementById('current-1').textContent = '0';
 
 document.querySelector('.btn-roll').addEventListener('click', function(){
     // if no game do nothing
@@ -46,20 +40,24 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
         document.querySelector('.final-score').disabled = true;
     }
     //generate random number
-    lastDice = dice;
-    dice = Math.floor(Math.random()*6)+1;
+    var dice1 = Math.floor(Math.random()*6)+1;
+    var dice2 = Math.floor(Math.random()*6)+1;
     //display roll result
-    var diceDom = document.querySelector('.dice');
-    diceDom.style.display = 'block';
-    diceDom.src = 'dice-'+dice+'.png';
+    var dice1Dom = document.getElementById('dice-1');
+    dice1Dom.style.display = 'block';
+    dice1Dom.src = 'dice-'+dice1+'.png';
+    var dice2Dom = document.getElementById('dice-2');
+    dice2Dom.style.display = 'block';
+    dice2Dom.src = 'dice-'+dice2+'.png';
+
     // update current or move to next player
-    if(dice === 6 && lastDice === dice){
+    if(dice1 === 6 && dice2 === 6){
         scores[activePlayer] = 0;
         document.querySelector('#score-'+activePlayer).textContent = 0;
         nextPlayer();
-    } else if(dice !== 1){
+    } else if(dice1 !== 1 && dice2 !== 1){
             //Add score
-            roundScore += dice;
+            roundScore += dice1 +dice2;
             document.querySelector('#current-' + activePlayer).textContent = roundScore;
     } else {
         nextPlayer();
@@ -75,7 +73,7 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
     //check for win condition
     if(scores[activePlayer] >= winScore){
         document.querySelector('#name-'+activePlayer).textContent = 'Winner!';
-        document.querySelector('.dice').style.display = 'none';
+        turnOffDice();
         document.querySelector('.player-'+activePlayer+'-panel').classList.add('winner');
         document.querySelector('.player-'+activePlayer+'-panel').classList.remove('active');
         document.querySelector('.final-score').disabled = false;
@@ -90,15 +88,19 @@ document.querySelector('.btn-new').addEventListener('click', init);
 function nextPlayer(){
     //tiddy up current players score and UI
     roundScore = 0;
-    dice = 0;
     document.querySelector('#current-'+activePlayer).textContent = roundScore;
     document.querySelector('.player-'+activePlayer+'-panel').classList.toggle('active');
-    document.querySelector('.dice').style.display = 'none';
+    turnOffDice();
     //move to new active player
     activePlayer =  (activePlayer+1)%2;
     //update new players UI
     document.querySelector('.player-'+activePlayer+'-panel').classList.toggle('active');
 };
+
+function turnOffDice(){
+    document.getElementById('dice-1').style.display = 'none';
+    document.getElementById('dice-2').style.display = 'none';
+}
 
 function init(){
     //initialize to base states
@@ -106,10 +108,8 @@ function init(){
     scores = [0,0];
     roundScore = 0;
     activePlayer = 0;
-    dice = 0;
-    lastDice = 0;
     //turn off the dice
-    document.querySelector('.dice').style.display = 'none';
+    turnOffDice();
     //set display elements to default values
     document.getElementById('score-0').textContent = '0';
     document.getElementById('score-1').textContent = '0';
