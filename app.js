@@ -11,9 +11,6 @@ GAME RULES:
 
 // game vars
 var scores, roundScore, activePlayer, dice, lastDice, activeGame;
-//document.querySelector('#current-' + activePlayer).textContent = dice;
-//this could be used to update the html during manipulation.
-//document.querySelector('#current-' + activePlayer).innerHTML = '<em>'+dice+'</em>';
 init();
 document.querySelector('.dice').style.display = 'none';
 
